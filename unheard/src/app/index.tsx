@@ -1,12 +1,13 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { TopBar, type Tab } from '../components/TopBar';
 import { LeaderboardScreen } from '../screens/LeaderboardScreen';
 import { PlayScreen } from '../screens/PlayScreen';
-import { colors } from '../theme';
+import { DEMO } from '../services/demo';
+import { colors, font } from '../theme';
 
 export default function Home() {
   const [tab, setTab] = useState<Tab>('play');
@@ -14,6 +15,9 @@ export default function Home() {
   return (
     <SafeAreaView edges={['top', 'left', 'right']} style={styles.screen}>
       <View style={styles.frame}>
+        {DEMO ? (
+          <Text style={styles.demo}>Preview with demo tracks · the full app streams real underground artists</Text>
+        ) : null}
         <View style={styles.header}>
           <TopBar
             tab={tab}
@@ -54,5 +58,13 @@ const styles = StyleSheet.create({
   },
   hidden: {
     display: 'none',
+  },
+  demo: {
+    color: colors.warn,
+    fontSize: 12,
+    fontWeight: font.bold,
+    textAlign: 'center',
+    paddingTop: 6,
+    paddingHorizontal: 16,
   },
 });

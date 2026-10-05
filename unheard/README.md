@@ -48,10 +48,18 @@ Scores go through a `submit_round` database function. It rejects impossible poin
   npx eas-cli@latest submit --platform ios   # and/or android
   ```
 
+## Preview build (no internet needed)
+
+`EXPO_PUBLIC_DEMO=1` swaps Audius for 20 original demo tracks synthesized on the device. All titles and artists are made up. Use it to show the app somewhere that can't reach outside services, such as a sandboxed web preview:
+
+```bash
+EXPO_PUBLIC_DEMO=1 npx expo export --clear --platform web
+```
+
 ## Develop
 
 ```bash
-npm test            # game logic + Audius client unit tests
+npm test            # game logic, Audius client and demo synth unit tests
 npm run typecheck
 npm run lint
 npm run web         # quick preview in a browser
@@ -63,7 +71,7 @@ npm run web         # quick preview in a browser
 | `src/screens/` | Play and Leaderboard tabs |
 | `src/components/` | UI pieces: top bar, chips, guess slots, clip bar, search, result sheet |
 | `src/game/` | Rules: clip schedule, scoring, stats, share text, names |
-| `src/services/` | Audius client, Supabase leaderboard, on-device storage |
+| `src/services/` | Audius client, demo tracks, Supabase leaderboard, on-device storage |
 | `src/hooks/useClipPlayer.ts` | Plays exact-length clips by watching the player's clock |
 | `supabase/schema.sql` | Leaderboard tables, security rules and functions |
 

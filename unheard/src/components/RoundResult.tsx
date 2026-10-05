@@ -7,6 +7,7 @@ import { MAX_GUESSES } from '../game/config';
 import { pointsFor, type RoundState } from '../game/logic';
 import { guessGrid } from '../game/share';
 import { trackUrl } from '../services/audius';
+import { DEMO } from '../services/demo';
 import { colors, font, radius } from '../theme';
 import { Button, formatCount } from './ui';
 
@@ -64,17 +65,21 @@ export function RoundResult({
         <Text style={styles.grid}>{guessGrid(round.guesses)}</Text>
 
         <View style={styles.actions}>
-          <Button
-            label="Listen"
-            icon="external-link"
-            variant="secondary"
-            onPress={() => Linking.openURL(trackUrl(t))}
-            style={{ flex: 1 }}
-          />
+          {DEMO ? null : (
+            <Button
+              label="Listen"
+              icon="external-link"
+              variant="secondary"
+              onPress={() => Linking.openURL(trackUrl(t))}
+              style={{ flex: 1 }}
+            />
+          )}
           <Button label="Share" icon="share" variant="secondary" onPress={onShare} style={{ flex: 1 }} />
         </View>
         <Button label="Next song" icon="arrow-right" onPress={onNext} />
-        <Text style={styles.credit}>Support underground artists: follow them on Audius.</Text>
+        <Text style={styles.credit}>
+          {DEMO ? 'Preview track made for this demo. The full app plays real artists from Audius.' : 'Support underground artists: follow them on Audius.'}
+        </Text>
       </View>
     </Modal>
   );

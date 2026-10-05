@@ -1,5 +1,6 @@
 import { UNDERGROUND_MAX_FOLLOWERS, type Genre } from '../game/config';
 import type { Track } from '../game/types';
+import { DEMO, DEMO_TRACKS, demoStreamUrl } from './demo';
 
 /**
  * Audius is an open, artist-owned streaming network full of independent artists, which makes it
@@ -81,6 +82,7 @@ export function resetAudiusHost(): void {
 }
 
 export function streamUrl(trackId: string): string {
+  if (DEMO) return demoStreamUrl(trackId);
   return (baseUrl ?? GATEWAY) + withParams(`/v1/tracks/${encodeURIComponent(trackId)}/stream`);
 }
 
@@ -139,6 +141,7 @@ export function undergroundOnly(tracks: Track[], maxFollowers = UNDERGROUND_MAX_
 }
 
 export async function fetchPool(genre: Genre, fetchImpl: Fetch = fetch): Promise<Track[]> {
+  if (DEMO) return DEMO_TRACKS;
   let raw: AudiusTrack[];
   if (genre.audiusGenre === null) {
     const res = await request<{ data?: AudiusTrack[] }>('/v1/tracks/trending/underground', { limit: 100 }, fetchImpl);
@@ -158,7 +161,7 @@ export async function fetchPool(genre: Genre, fetchImpl: Fetch = fetch): Promise
 
 export async function searchAudius(query: string, fetchImpl: Fetch = fetch): Promise<Track[]> {
   const q = query.trim();
-  if (q.length < 2) return [];
+  if (q.length < 2 || DEMO) return [];
   const res = await request<{ data?: AudiusTrack[] }>('/v1/tracks/search', { query: q, limit: 10 }, fetchImpl);
   return dedupe((res.data ?? []).filter(isPlayable).map(toTrack));
 }
