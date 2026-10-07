@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Zurzx, full-stack Roblox scripter. Combat, data saving, UI, monetization and backend systems in Luau.">
+<meta property="og:title" content="Zurzx Portfolio">
+<meta property="og:description" content="Full-stack Roblox scripter: combat, data, UI, monetization and backend systems in Luau.">
+<title>Zurzx Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  /* Layout: a Roblox Studio script editor turned into a hiring page. A code-panel hero, Explorer-style
+     service paths, then work, process, rates and contact in one left-aligned column. */
+  :root {
+    color-scheme: dark;
+    --bg: #13151a;
+    --panel: #1a1d24;
+    --panel-2: #222631;
+    --line: #2c313d;
+    --fg: #e9ebf1;
+    --muted: #9ba2b3;
+    --accent: #4da3ff;
+    --accent-ink: #061322;
+    --accent-soft: rgba(77, 163, 255, 0.14);
+    --ok: #6fdc8c;
+    --warn: #ffc66d;
+    /* Studio script editor syntax colors */
+    --kw: #f86d7c;
+    --str: #adf195;
+    --num: #ffc66d;
+    --fn: #84d6f7;
+    --cm: #6b7385;
+    --script: #8bb8ff;
+    --local: #6fdc8c;
+    --module: #c79bff;
+    --display: "Unbounded", "Arial Black", system-ui, sans-serif;
+    --body: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      color-scheme: light;
+      --bg: #f5f6f9;
+      --panel: #ffffff;
+      --panel-2: #eef1f6;
+      --line: #dbe0e8;
+      --fg: #131720;
+      --muted: #596273;
+      --accent: #0b6bdb;
+      --accent-ink: #ffffff;
+      --accent-soft: rgba(11, 107, 219, 0.1);
+      --ok: #1f8f43;
+      --warn: #9a5b00;
+      --kw: #c4264a;
+      --str: #2e7d32;
+      --num: #a65300;
+      --fn: #0b72b8;
+      --cm: #8a93a3;
+      --script: #2563c9;
+      --local: #1f8f43;
+      --module: #7b3fd1;
+    }
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f5f6f9;
+    --panel: #ffffff;
+    --panel-2: #eef1f6;
+    --line: #dbe0e8;
+    --fg: #131720;
+    --muted: #596273;
+    --accent: #0b6bdb;
+    --accent-ink: #ffffff;
+    --accent-soft: rgba(11, 107, 219, 0.1);
+    --ok: #1f8f43;
+    --warn: #9a5b00;
+    --kw: #c4264a;
+    --str: #2e7d32;
+    --num: #a65300;
+    --fn: #0b72b8;
+    --cm: #8a93a3;
+    --script: #2563c9;
+    --local: #1f8f43;
+    --module: #7b3fd1;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+  .wrap { width: 100%; max-width: 1080px; margin: 0 auto; padding-inline: 20px; }
+
+  /* Draft banner: shown until SITE.draft is false */
+  .draft {
+    background: var(--panel-2);
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13.5px;
+    padding-block: 9px;
+  }
+  .draft b { color: var(--warn); font-weight: 600; }
+
+  /* Header */
+  header.top {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .top .wrap { display: flex; align-items: center; gap: 20px; min-height: 64px; }
+  .brand { font-family: var(--display); font-weight: 700; font-size: 18px; text-decoration: none; letter-spacing: 0.02em; }
+  .brand span { color: var(--accent); }
+  nav.links { display: flex; gap: 4px; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
+  nav.links::-webkit-scrollbar { display: none; }
+  nav.links a {
+    text-decoration: none; color: var(--muted); font-weight: 600; font-size: 14.5px;
+    padding: 8px 12px; border-radius: 999px; white-space: nowrap;
+  }
+  nav.links a:hover { color: var(--fg); background: var(--panel-2); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font: 600 15px/1 var(--body); text-decoration: none; cursor: pointer;
+    border-radius: 999px; padding: 13px 20px; border: 1px solid transparent;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--accent) 88%, var(--fg)); }
+  .btn-ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+  .btn-ghost:hover { background: var(--panel-2); }
+  .top .btn { padding: 10px 16px; font-size: 14px; flex-shrink: 0; }
+
+  /* Hero */
+  .hero { padding-block: 64px 56px; }
+  .hero .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+  .status {
+    display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600;
+    color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, transparent);
+    padding: 6px 12px; border-radius: 999px;
+  }
+  .status.closed { color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+  .status i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 25%, transparent); }
+  h1 {
+    font-family: var(--display); font-weight: 700; letter-spacing: -0.01em;
+    font-size: clamp(44px, 8vw, 84px); line-height: 1; margin: 18px 0 14px;
+  }
+  .role { font-family: var(--mono); color: var(--accent); font-size: 15px; margin: 0 0 18px; }
+  .pitch { font-size: clamp(17px, 2vw, 19px); color: var(--muted); max-width: 34em; margin: 0 0 28px; text-wrap: pretty; }
+  .pitch strong { color: var(--fg); font-weight: 600; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .editor {
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.55); min-width: 0;
+  }
+  .tabs { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line); background: var(--panel-2); }
+  .tab { font-family: var(--mono); font-size: 12.5px; color: var(--fg); display: inline-flex; align-items: center; gap: 7px; }
+  .glyph { width: 14px; height: 14px; border-radius: 3px; display: inline-block; flex-shrink: 0; }
+  .glyph.module { background: var(--module); }
+  .glyph.script { background: var(--script); }
+  .glyph.local { background: var(--local); }
+  .tabs .path { margin-left: auto; font-family: var(--mono); font-size: 11.5px; color: var(--cm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  pre.code {
+    margin: 0; padding: 18px 0; overflow-x: auto; font-family: var(--mono); font-size: 13.5px; line-height: 1.75; tab-size: 2;
+    counter-reset: ln;
+  }
+  pre.code .l { display: block; padding: 0 18px 0 0; white-space: pre; }
+  pre.code .l::before {
+    counter-increment: ln; content: counter(ln); display: inline-block; width: 3.2em; padding-right: 1.2em;
+    text-align: right; color: var(--cm); opacity: 0.6;
+  }
+  .kw { color: var(--kw); } .str { color: var(--str); } .num { color: var(--num); } .fn { color: var(--fn); } .cm { color: var(--cm); font-style: italic; }
+  .caret { display: inline-block; width: 8px; height: 1.1em; vertical-align: -0.2em; background: var(--accent); animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* Sections */
+  section.block { padding-block: 72px; border-top: 1px solid var(--line); }
+  .head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 32px; }
+  .eyebrow { font-family: var(--mono); font-size: 12.5px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 8px; }
+  h2 { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 4vw, 38px); line-height: 1.12; margin: 0; text-wrap: balance; }
+  .head p.lede { color: var(--muted); margin: 0; max-width: 32em; }
+
+  /* Services as Explorer paths */
+  .services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .svc { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .svc .p { font-family: var(--mono); font-size: 12px; color: var(--cm); display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .svc .p span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .svc h3 { margin: 0; font-size: 18px; font-weight: 700; }
+  .svc p { margin: 0; color: var(--muted); font-size: 15px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 6px; }
+  .chip { font-family: var(--mono); font-size: 11.5px; padding: 4px 9px; border-radius: 6px; background: var(--panel-2); color: var(--fg); border: 1px solid var(--line); }
+
+  /* Work */
+  .work { display: grid; gap: 16px; }
+  .proj {
+    display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; align-items: start;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; position: relative;
+  }
+  .thumb {
+    aspect-ratio: 16 / 10; max-width: 100%; border-radius: 10px; background: var(--panel-2); border: 1px solid var(--line);
+    display: grid; place-items: center; overflow: hidden; color: var(--cm); font-family: var(--mono); font-size: 12px;
+  }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .proj h3 { margin: 0 0 4px; font-size: 20px; font-weight: 700; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13.5px; color: var(--muted); margin-bottom: 10px; font-variant-numeric: tabular-nums; }
+  .meta b { color: var(--fg); font-weight: 600; }
+  .proj p { margin: 0 0 12px; color: var(--muted); }
+  .proj .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .proj .links a { font-size: 14px; padding: 9px 14px; }
+  .tag-example {
+    position: absolute; top: 14px; right: 14px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
+    color: var(--warn); border: 1px dashed color-mix(in srgb, var(--warn) 60%, transparent); padding: 3px 7px; border-radius: 5px;
+  }
+
+  /* Process */
+  .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; counter-reset: step; list-style: none; padding: 0; margin: 0; }
+  .steps li { border-top: 2px solid var(--accent); padding-top: 16px; min-width: 0; }
+  .steps li::before { counter-increment: step; content: "Step " counter(step); font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .steps h3 { font-size: 17px; margin: 6px 0 6px; }
+  .steps p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  /* Rates */
+  .rates-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  .table-wrap { overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  th { font-family: var(--mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--panel-2); }
+  td.price { white-space: nowrap; font-weight: 700; font-variant-numeric: tabular-nums; }
+  td .sub { display: block; color: var(--muted); font-size: 13.5px; font-weight: 400; }
+  .terms { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; }
+  .terms h3 { margin: 0 0 10px; font-size: 16px; }
+  .terms ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 15px; display: grid; gap: 6px; }
+  .pay { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+
+  /* FAQ */
+  .faq { display: grid; gap: 10px; max-width: 760px; }
+  details { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 0 18px; }
+  summary { cursor: pointer; list-style: none; font-weight: 600; padding: 16px 0; display: flex; justify-content: space-between; gap: 12px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font-family: var(--mono); color: var(--accent); font-size: 18px; line-height: 1; }
+  details[open] summary::after { content: "−"; }
+  details p { margin: 0 0 16px; color: var(--muted); }
+
+  /* Contact */
+  .contact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; min-width: 0; }
+  .discord { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 14px 0 18px; }
+  .handle {
+    font-family: var(--mono); font-size: 18px; font-weight: 600; background: var(--panel-2); border: 1px solid var(--line);
+    padding: 10px 14px; border-radius: 10px; user-select: all; overflow-wrap: anywhere;
+  }
+  .copied { font-size: 13.5px; color: var(--ok); min-height: 1.4em; }
+  .socials { display: flex; flex-wrap: wrap; gap: 8px; }
+  .socials a { font-size: 14px; padding: 10px 14px; }
+  .brief { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 10px; }
+  .brief li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; color: var(--muted); font-size: 15px; }
+  .brief li::before { content: "✓"; color: var(--accent); font-weight: 700; }
+  .brief b { color: var(--fg); font-weight: 600; }
+  .card h3 { margin: 0; font-size: 18px; }
+  .card > p { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+
+  footer { border-top: 1px solid var(--line); padding-block: 28px 40px; color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+
+  @media (max-width: 900px) {
+    .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+    .services { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
+    .rates-grid, .contact { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 640px) {
+    nav.links { display: none; }
+    .top .btn { margin-left: auto; }
+    .hero { padding-block: 40px 44px; }
+    section.block { padding-block: 52px; }
+    .services, .steps { grid-template-columns: minmax(0, 1fr); }
+    .proj { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 18px; }
+    pre.code { font-size: 12.5px; }
+    th, td { padding: 12px 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .caret { animation: none; }
+    .btn { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="draft" id="draft" hidden>
+  <div class="wrap"><b>Draft.</b> Projects, prices, terms and links marked as examples are placeholders until Zurzx fills them in.</div>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" id="brand">Zurzx<span>.</span></a>
+    <nav class="links" aria-label="Sections">
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#process">Process</a>
+      <a href="#rates">Rates</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-primary" href="#contact">Hire me</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="status" id="status"><i></i><span id="status-text">Open for commissions</span></span>
+        <h1 id="name">Zurzx</h1>
+        <p class="role" id="role">full-stack roblox scripter · luau</p>
+        <p class="pitch" id="pitch"></p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#contact">Start a commission</a>
+          <a class="btn btn-ghost" href="#work">See my work</a>
+        </div>
+      </div>
+      <div class="editor" aria-label="Profile written as a Luau module">
+        <div class="tabs">
+          <span class="tab"><i class="glyph module"></i><span id="file">Zurzx</span></span>
+          <span class="path">ReplicatedStorage › Developers</span>
+        </div>
+        <pre class="code" id="code"></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="services">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Services</p>
+          <h2>Client, server and everything between</h2>
+        </div>
+        <p class="lede">Pick one system or hand over the whole game. Each card is a piece I build end to end.</p>
+      </div>
+      <div class="services" id="service-list"></div>
+    </div>
+  </section>
+
+  <section class="block" id="work">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Work</p>
+          <h2>Selected projects</h2>
+        </div>
+        <p class="lede">What I built on each one, and where you can see it running.</p>
+      </div>
+      <div class="work" id="work-list"></div>
+    </div>
+  </section>
+
+  <section class="block" id="process">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Process</p>
+          <h2>How a commission runs</h2>
+        </div>
+      </div>
+      <ol class="steps" id="step-list"></ol>
+    </div>
+  </section>
+
+  <section class="block" id="rates">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Rates</p>
+          <h2>Starting prices</h2>
+        </div>
+        <p class="lede">Final quotes depend on scope. Send the details and you get a fixed price before any work starts.</p>
+      </div>
+      <div class="rates-grid">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">Work</th><th scope="col">From</th></tr></thead>
+            <tbody id="rate-rows"></tbody>
+          </table>
+        </div>
+        <div class="terms">
+          <h3>Payment</h3>
+          <div class="pay" id="pay"></div>
+          <h3>Terms</h3>
+          <ul id="terms"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="eyebrow">FAQ</p>
+          <h2>Before you message</h2>
+        </div>
+      </div>
+      <div class="faq" id="faq-list"></div>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Contact</p>
+          <h2>Send me your project</h2>
+        </div>
+      </div>
+      <div class="contact">
+        <div class="card">
+          <h3>Discord is fastest</h3>
+          <p>Add me and send the brief in your first message.</p>
+          <div class="discord">
+            <span class="handle" id="discord">zurzx</span>
+            <button class="btn btn-primary" type="button" id="copy">Copy username</button>
+          </div>
+          <div class="copied" id="copied" aria-live="polite"></div>
+          <div class="socials" id="socials"></div>
+        </div>
+        <div class="card">
+          <h3>Put this in your first message</h3>
+          <p>A brief like this gets you a quote the same day.</p>
+          <ul class="brief" style="margin-top:16px">
+            <li><span><b>The game:</b> a link or a short description and genre</span></li>
+            <li><span><b>The task:</b> which systems you need, with any references</span></li>
+            <li><span><b>Deadline:</b> when you need it live</span></li>
+            <li><span><b>Budget:</b> a range in USD or Robux</span></li>
+            <li><span><b>Access:</b> Team Create, a place file, or a fresh start</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span id="copyright">© Zurzx</span>
+    <span>Built for Roblox studios and solo devs.</span>
+  </div>
+</footer>
+
+<script>
+/* ───────────────────────────────────────────────────────────────
+   EDIT EVERYTHING HERE. The page renders from this object.
+   Set example: false (or delete the entry) once a project is real,
+   and set draft: false when nothing is a placeholder anymore.
+   ─────────────────────────────────────────────────────────────── */
+const SITE = {
+  draft: true,
+  name: 'Zurzx',
+  years: 6,
+  open: true,
+  pitch: 'I script the systems that make Roblox games work: <strong>combat, data saving, UI, monetization and backend</strong>, from the first prototype to live updates. Six years in Luau, on both the client and the server.',
+  stack: ['Luau', 'Client + Server', 'DataStores', 'RemoteEvents', 'UI'],
+  discord: 'zurzx', // ← your exact Discord username
+  socials: [
+    { label: 'GitHub', url: 'https://github.com/Zurzxctrl' },
+    { label: 'Roblox profile', url: '', example: true }, // ← paste your Roblox profile link
+    { label: 'X / Twitter', url: '', example: true },
+  ],
+  services: [
+    { path: 'ServerScriptService/CombatService', kind: 'script', title: 'Combat & abilities', text: 'Hitboxes, cooldowns, combos and abilities, validated on the server so exploiters cannot fake damage.', tags: ['Server-authoritative', 'Hit detection'] },
+    { path: 'ServerScriptService/DataService', kind: 'script', title: 'Data & saving', text: 'Player data that saves reliably, with session locking, inventories, currencies and leaderboards.', tags: ['DataStores', 'Session locking'] },
+    { path: 'StarterPlayerScripts/UIController', kind: 'local', title: 'UI programming', text: 'Menus, shops, HUDs and inventories wired to real data, with tweens that feel responsive.', tags: ['TweenService', 'Responsive layouts'] },
+    { path: 'ServerScriptService/RoundService', kind: 'script', title: 'Game loops', text: 'Lobbies, round systems, matchmaking, spawning and win conditions that hold up with full servers.', tags: ['Rounds', 'Teleports'] },
+    { path: 'ReplicatedStorage/Shared/Monetization', kind: 'module', title: 'Monetization', text: 'Game passes, developer products and receipt processing that never loses a purchase.', tags: ['ProcessReceipt', 'Game passes'] },
+    { path: 'ServerScriptService/Fixes', kind: 'script', title: 'Fixes & optimization', text: 'Taking over an existing codebase: bug hunts, lag and memory fixes, and patching exploits.', tags: ['MicroProfiler', 'Refactors'] },
+  ],
+  work: [
+    { example: true, title: 'Round-based horror game', role: 'Lead scripter', stats: [['Status', 'In development']], text: 'Describe the game in one line, then what you built: e.g. procedural rooms, entity AI, door and key systems, lobby and party teleports.', tags: ['Procedural rooms', 'Entity AI', 'Lobby'], video: '', game: '', image: '' },
+    { example: true, title: 'Simulator data overhaul', role: 'Backend scripter', stats: [['Visits', '—'], ['Peak CCU', '—']], text: 'What was broken, what you changed, and the result. Numbers help: crash rate, data loss reports, session length.', tags: ['DataStores', 'Migration'], video: '', game: '', image: '' },
+    { example: true, title: 'Combat framework', role: 'Systems scripter', stats: [['Delivered', '—']], text: 'A framework built for a client: what it supports and how their team uses it.', tags: ['Hitboxes', 'Abilities', 'Netcode'], video: '', game: '', image: '' },
+  ],
+  steps: [
+    { title: 'Send the brief', text: 'Game, task, deadline and budget. The checklist under Contact covers it.' },
+    { title: 'Get a fixed quote', text: 'I reply with scope, price and milestones so you know exactly what you are paying for.' },
+    { title: 'Watch it come together', text: 'Progress clips at each milestone, in Team Create or a place file you own.' },
+    { title: 'Handover and support', text: 'Clean, commented code, a walkthrough of how it works, and bug fixes after delivery.' },
+  ],
+  rates: [
+    { example: true, work: 'Single system', note: 'One feature, e.g. a shop or a data module', price: '$— / R$—' },
+    { example: true, work: 'Full feature set', note: 'Several connected systems', price: '$— / R$—' },
+    { example: true, work: 'Full game', note: 'Everything scripted, quoted by milestone', price: 'Quote' },
+    { example: true, work: 'Hourly fixes', note: 'Bugs, optimization, small changes', price: '$— / hr' },
+  ],
+  payment: ['USD (PayPal)', 'Robux (group payout)'],
+  terms: [
+    'Example: 50% upfront, 50% on delivery for new clients',
+    'Example: milestone payments on larger projects',
+    'Example: free bug fixes for 14 days after delivery',
+    'You own the code once it is paid for',
+  ],
+  faq: [
+    { q: 'Can you work on my existing game?', a: 'Yes. Invite me to Team Create or send a place file. I read the current code first, then quote the fix or feature.' },
+    { q: 'Do I get the source code?', a: 'Yes. Everything is delivered inside your place, readable and commented, and it is yours once paid.' },
+    { q: 'How do you handle exploiters?', a: 'Anything that matters, like damage, currency and purchases, is decided on the server. The client only asks; the server checks.' },
+    { q: 'Do you build UI design too?', a: 'I script and wire up UI. If you need the visual design itself, send your designer’s files or a reference and I build to match.' },
+  ],
+};
+
+/* ─────────────── rendering, no need to edit below ─────────────── */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+const exampleTag = (on) => (on ? '<span class="tag-example">EXAMPLE</span>' : '');
+
+$('draft').hidden = !SITE.draft;
+document.title = `${SITE.name} Portfolio`;
+$('brand').innerHTML = `${esc(SITE.name)}<span>.</span>`;
+$('name').textContent = SITE.name;
+$('pitch').innerHTML = SITE.pitch;
+$('status').classList.toggle('closed', !SITE.open);
+$('status-text').textContent = SITE.open ? 'Open for commissions' : 'Commissions closed';
+$('file').textContent = SITE.name;
+$('copyright').textContent = `© ${new Date().getFullYear()} ${SITE.name}`;
+
+// Hero code panel: the profile written as a Luau module, with Studio's syntax colors.
+const k = (s) => `<span class="kw">${s}</span>`;
+const str = (s) => `<span class="str">"${esc(s)}"</span>`;
+const id = esc(SITE.name.replace(/[^A-Za-z0-9_]/g, '') || 'Dev');
+const lines = [
+  `<span class="cm">--!strict</span>`,
+  `${k('local')} ${id} = {}`,
+  ``,
+  `${id}.role = ${str('Full-stack scripter')}`,
+  `${id}.years = <span class="num">${Number(SITE.years)}</span>`,
+  `${id}.stack = { ${SITE.stack.map(str).join(', ')} }`,
+  `${id}.open = ${k(SITE.open ? 'true' : 'false')}`,
+  ``,
+  `${k('function')} ${id}.<span class="fn">hire</span>(project: Project): Deal`,
+  `\t${k('return')} Deal.<span class="fn">new</span>(project, { fixedQuote = ${k('true')}, milestones = ${k('true')} })`,
+  `${k('end')}`,
+  ``,
+  `${k('return')} ${id}<span class="caret" aria-hidden="true"></span>`,
+];
+$('code').innerHTML = lines.map((l) => `<span class="l">${l || ' '}</span>`).join('');
+
+$('service-list').innerHTML = SITE.services.map((s) => `
+  <article class="svc">
+    <div class="p"><i class="glyph ${esc(s.kind)}"></i><span>${esc(s.path)}</span></div>
+    <h3>${esc(s.title)}</h3>
+    <p>${esc(s.text)}</p>
+    <div class="chips">${s.tags.map((t) => `<span class="chip">${esc(t)}</span>`).join('')}</div>
+  </article>`).join('');
+
+$('work-list').innerHTML = SITE.work.map((w) => `
+  <article class="proj">
+    ${exampleTag(w.example)}
+    <div class="thumb">${w.image ? `<img src="${esc(w.image)}" alt="${esc(w.title)} screenshot">` : 'screenshot / gif'}</div>
+    <div>
+      <h3>${esc(w.title)}</h3>
+      <div class="meta"><span>Role: <b>${esc(w.role)}</b></span>${w.stats.map(([a, b]) => `<span>${esc(a)}: <b>${esc(b)}</b></span>`).join('')}</div>
+      <p>${esc(w.text)}</p>
+      <div class="chips">${w.tags.map((t) => `<span class="chip">${esc(t)}</span>`).join('')}</div>
+      ${w.video || w.game ? `<div class="links">
+        ${w.video ? `<a class="btn btn-primary" href="${esc(w.video)}" target="_blank" rel="noopener">Watch clip</a>` : ''}
+        ${w.game ? `<a class="btn btn-ghost" href="${esc(w.game)}" target="_blank" rel="noopener">Play on Roblox</a>` : ''}
+      </div>` : ''}
+    </div>
+  </article>`).join('');
+
+$('step-list').innerHTML = SITE.steps.map((s) => `<li><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></li>`).join('');
+
+$('rate-rows').innerHTML = SITE.rates.map((r) => `
+  <tr>
+    <td>${esc(r.work)}${r.example ? ' <span class="chip" style="color:var(--warn)">example</span>' : ''}<span class="sub">${esc(r.note)}</span></td>
+    <td class="price">${esc(r.price)}</td>
+  </tr>`).join('');
+$('pay').innerHTML = SITE.payment.map((p) => `<span class="chip">${esc(p)}</span>`).join('');
+$('terms').innerHTML = SITE.terms.map((t) => `<li>${esc(t)}</li>`).join('');
+
+$('faq-list').innerHTML = SITE.faq.map((f, i) => `
+  <details${i === 0 ? ' open' : ''}><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('');
+
+$('discord').textContent = SITE.discord;
+$('socials').innerHTML = SITE.socials
+  .filter((s) => s.url || s.example)
+  .map((s) => s.url
+    ? `<a class="btn btn-ghost" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`
+    : `<span class="btn btn-ghost" style="opacity:.55;cursor:default" title="Add this link in SITE.socials">${esc(s.label)} · add link</span>`)
+  .join('');
+
+$('copy').addEventListener('click', () => {
+  const done = (msg) => { $('copied').textContent = msg; };
+  const select = () => {
+    const range = document.createRange();
+    range.selectNodeContents($('discord'));
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    done('Selected. Press Ctrl+C or ⌘C to copy.');
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(SITE.discord).then(() => done(`Copied “${SITE.discord}”. Add me on Discord.`), select);
+  } else {
+    select();
+  }
+});
+</script>
+</body>
+</html>
